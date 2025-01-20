@@ -6,7 +6,7 @@
 
 use std::io::Write;
 use std::path::Path;
-use zip::{result::ZipResult, ZipWriter};
+use zip::{result::ZipResult, ZipWriter, write::SimpleFileOptions};
 
 /// A piece of data in an open raster image
 pub enum Element {
@@ -145,7 +145,7 @@ impl Ora {
 
         let mut zip = ZipWriter::new(file);
 
-        zip.start_file("mimetype", Default::default())?;
+        zip.start_file("mimetype", SimpleFileOptions::default())?;
         zip.write_all(b"image/openraster")?;
 
         let mut layers_xml = String::new();
@@ -184,23 +184,23 @@ impl Ora {
             layers = layers_xml,
         );
 
-        zip.start_file("stack.xml", Default::default())?;
+        zip.start_file("stack.xml", SimpleFileOptions::default())?;
         zip.write_all(xml.as_bytes())?;
 
-        zip.start_file("mergedimage.png", Default::default())?;
+        zip.start_file("mergedimage.png", SimpleFileOptions::default())?;
         zip.write_all(&self.merged_image)?;
 
-        zip.add_directory("data/", Default::default())?;
+        zip.add_directory("data/", SimpleFileOptions::default())?;
         for layer in &self.layers {
             zip.start_file(
                 format!("data/layer{:?}.png", layer.layer_number),
-                Default::default(),
+                SimpleFileOptions::default(),
             )?;
             zip.write_all(&layer.image)?;
         }
 
-        zip.add_directory("Thumbnails/", Default::default())?;
-        zip.start_file("Thumbnails/thumbnail.png", Default::default())?;
+        zip.add_directory("Thumbnails/", SimpleFileOptions::default())?;
+        zip.start_file("Thumbnails/thumbnail.png", SimpleFileOptions::default())?;
         zip.write_all(&self.thumbnail)?;
 
         zip.finish()?;

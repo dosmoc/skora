@@ -46,6 +46,7 @@ use log::{info,debug,trace,error};
 use std::fs;
 use std::path::Path;
 use std::io::prelude::*;
+use std::io::Cursor;
 
 pub mod ora;
 use crate::ora::{Element, Ora};
@@ -103,7 +104,7 @@ pub fn convert_file(file_path_string: String, export_tiff: bool) -> Result<Strin
             let layer_stem = file_path.file_stem().unwrap().to_str().unwrap();
 
             // get file path and add 'layers' directory to it
-            let layer_parent = file_path.parent().unwrap().clone().join("layers");
+            let layer_parent = file_path.parent().unwrap().join("layers");
 
             // create the layers directory if it doesn't exist
             fs::create_dir_all(layer_parent.clone())?;
@@ -298,10 +299,10 @@ pub fn ifd_to_ora_element(
 pub fn image_to_buf(
     input: ImageBuffer<image::Rgba<u8>, Vec<u8>>,
 ) -> Result<Vec<u8>, Box<dyn Error>> {
-    let mut buf: Vec<u8> = vec![];
+    let mut buf = Cursor::new(vec![]);
     let img: DynamicImage = DynamicImage::ImageRgba8(input);
-    img.write_to(&mut buf, image::ImageOutputFormat::Png)?;
-    Ok(buf)
+    img.write_to(&mut buf, image::ImageFormat::Png)?;
+    Ok(buf.into_inner())
 }
 
 /// Convert BGRA image to RGBA

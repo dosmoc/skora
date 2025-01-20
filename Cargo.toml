@@ -1,6 +1,6 @@
 [package]
 name = "skora"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2018"
 license = "Apache-2.0"
 description = "This library provides functions to read and extract data from Autodesk Sketchbook tiff files and export them as Open Raster files for use in Gimp or Krita."
@@ -12,12 +12,12 @@ keywords = ["tiff", "sketchbook", "open-raster", "ora", "openraster"]
 categories = ["multimedia", "multimedia::images", "parsing"]
 
 [dependencies]
-pretty-hex = "0.2.1"
-byteorder = "1.4.3"
-num-traits = "0.2.14"
-num-derive = "0.3.3"
-num = "0.4.0"
-image = "0.23.14"
-zip = "0.5.13"
+pretty-hex = "0.4.1"
+byteorder = "1.5.0"
+num-traits = "0.2.19"
+num-derive = "0.4.2"
+num = "0.4.3"
+image = "0.25.5"
+zip = "2.2.2"
 hex = "0.4.3"
-log = "0.4.14"
+log = "0.4.22"
